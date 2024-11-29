@@ -5,7 +5,7 @@ mod parser;
 
 fn main() {
     println!("Enter boolean expression to convert to POS.");
-    println!("Example: A & (B | !C | C) | G -> (A & B) | (G)");
+    println!("Example: A & ((!C | C) & B) | G -> A & B | G");
     let mut input = String::new();
     stdin().read_line(&mut input).unwrap();
 
@@ -13,5 +13,5 @@ fn main() {
     let expr = Parser::parse(tokens).unwrap();
     let simplified = BooleanSimplifier::simplify(expr);
 
-    println!("POS form: {}", simplified);
+    println!("SOP form: {}", simplified);
 }
