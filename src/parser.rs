@@ -346,9 +346,19 @@ impl BooleanSimplifier {
         // the ith prime implicant
         let product = |i: usize| {
             let prime = primes[i];
-            assert!(prime.fixed_true != 0 || prime.fixed_false != 0);
 
-            let mut old = None;
+            let mut old = if prime.fixed_true == 0 && prime.fixed_false == 0 {
+                // tautology
+                // again should've included literals...
+                Some(Expr::Or(
+                    Box::new(Expr::Var('-')),
+                    Box::new(Expr::Not(Box::new(Expr::Var('-'))))
+                ))
+            }
+            else {
+                None
+            };
+
             for (vind, name) in variables.iter().enumerate() {
                 let curr = if prime.fixed_true & (1usize << vind) != 0 {
                     Some(Expr::Var(*name))
